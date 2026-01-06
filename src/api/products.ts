@@ -9,6 +9,8 @@ export interface Review {
 		email?: string;
 	};
 	date?: string;
+	reviewerName?: string;
+	reviewerEmail?: string;
 }
 
 export interface Product {
@@ -24,6 +26,8 @@ export interface Product {
 	thumbnail: string;
 	images: string[];
 	reviews?: Review[];
+	availabilityStatus: string;
+	quantity: number;
 }
 
 export interface ProductsResponse {

@@ -11,6 +11,7 @@ import {
 	Loader2
 } from "lucide-react";
 import { Accordion } from "../components/Accordion";
+import { useProductStore } from "../store/useProductStore";
 
 export const ProductDetailsPage = () => {
 	const { id } = useParams<{ id: string }>();
@@ -18,6 +19,8 @@ export const ProductDetailsPage = () => {
 	const [product, setProduct] = useState<Product | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const { cart, addToCart } = useProductStore(state => state);
+	console.log(cart);
 
 	useEffect(() => {
 		const loadProduct = async () => {
@@ -137,6 +140,19 @@ export const ProductDetailsPage = () => {
 		}
 	];
 
+	const addToCartClick = () => {
+		console.log(product);
+		const { id, thumbnail, title, price, availabilityStatus } = product;
+		addToCart({
+			id,
+			thumbnail,
+			title,
+			price,
+			availabilityStatus,
+			quantity: cart[id] ? (cart[id].quantity || 0) + 1 : 1
+		});
+	};
+
 	return (
 		<div className="min-h-screen bg-white">
 			<div className="container mx-auto px-4 py-8">
@@ -244,9 +260,13 @@ export const ProductDetailsPage = () => {
 							))}
 						</div>
 
-						<button className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium mb-4">
+						<button
+							className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium mb-4 disabled:cursor-not-allowed"
+							onClick={!cart[product.id] ? addToCartClick : undefined}
+							disabled={product.availabilityStatus !== "In Stock"}
+						>
 							<ShoppingCart className="w-5 h-5" />
-							Order Now
+							{cart[product.id] ? "Added to Cart" : "Order Now"}
 						</button>
 
 						<div className="flex gap-6 text-sm text-gray-600">
@@ -279,7 +299,7 @@ export const ProductDetailsPage = () => {
 						) : (
 							reviews.map(review => (
 								<div
-									key={review.id}
+									key={review.date + review.email}
 									className="border-b border-gray-200 pb-6 last:border-b-0"
 								>
 									<div className="flex items-start justify-between mb-2">

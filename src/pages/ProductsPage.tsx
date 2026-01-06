@@ -9,6 +9,7 @@ import { Pagination } from "../components/Pagination";
 import type { SortOption } from "../components/SortDropdown";
 import { Loader2 } from "lucide-react";
 import { useDebounce } from "../hooks/useDebounce";
+import { Link } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 8;
 const DEBOUNCE_DELAY = 500;
@@ -150,9 +151,16 @@ export const ProductsPage = () => {
 			<div className="container mx-auto px-4 py-8">
 				{/* Header Section */}
 				<div className="mb-8">
-					<h1 className="text-2xl font-normal text-[#0A0A0A] mb-2">
-						Product Catalog
-					</h1>
+					<div className="flex justify-between">
+						<h1 className="text-2xl font-normal text-[#0A0A0A] mb-2">
+							Product Catalog
+						</h1>
+						<Link to="/cart">
+							<button className="px-3 py-1 bg-[#F3F3F5] rounded-xl border">
+								Cart
+							</button>
+						</Link>
+					</div>
 					<p className="text-[#4A5565] text-base">
 						Discover our wide selection of quality products
 					</p>
